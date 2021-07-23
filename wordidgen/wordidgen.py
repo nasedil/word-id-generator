@@ -3,22 +3,42 @@
 from argparse import ArgumentDefaultsHelpFormatter
 from argparse import ArgumentParser
 
+from collections import namedtuple
 import random
+
+Consonant = namedtuple('Consonant', ['hard_letter', 'soft_letter'])
+Vowel = namedtuple('Vowel', ['letter', 'is_soft'])
+
+CONSONANTS_REGULAR = [Consonant(l, l) for l in 'бвгджзклмнпрсфхчц']
+CONSONANT_T = Consonant('т', None)
+CONSONANT_SH = Consonant('ш', 'щ')
+CONSONANTS = CONSONANTS_REGULAR + [CONSONANT_T, CONSONANT_SH]
+
+VOWELS_HARD = [Vowel(l, False) for l in 'аоуыэ']
+VOWELS_SOFT = [Vowel(l, True) for l in 'яёюие']
+VOWELS = VOWELS_HARD + VOWELS_SOFT
 
 class WordGenerator:
     """Generate word by combining syllables"""
 
     def __init__(self,
-                 consonants='бвгджзклмнпрстфхцчшщ',
-                 vowels='аяоёуюэеыи',
+                 consonants=CONSONANTS,
+                 vowels=VOWELS,
                  length=4):
         self.consonants = consonants
         self.vowels = vowels
         self.length = length
-        self.syllable_count = len(self.consonants) * len(self.vowels)
+        self.syllables = []
+        for i in self.consonants:
+            for j in self.vowels:
+                if j.is_soft and i.soft_letter is not None:
+                    self.syllables.append(i.soft_letter + j.letter)
+                if not j.is_soft and i.hard_letter is not None:
+                    self.syllables.append(i.hard_letter + j.letter)
+        self.syllable_count = len(self.syllables)
         self.count = self.syllable_count ** self.length
 
-    def generate(self, capitalize=False, number=None):
+    def generate(self, number=None):
         """Generate a word"""
         word = ''
         if number is None:
@@ -26,12 +46,7 @@ class WordGenerator:
         for i in range(self.length):
             r = number % self.syllable_count
             number = number // self.syllable_count
-            c_index = r // len(self.vowels)
-            v_index = r % len(self.vowels)
-            word += self.consonants[c_index] + self.vowels[v_index]
-            print(number, word, r, c_index, v_index)
-        if capitalize:
-            word = word.capitalize()
+            word += self.syllables[r]
         return word
 
 def main():
@@ -57,7 +72,9 @@ def main():
     if args.count:
         print(worg_generator.count)
         return
-    word = worg_generator.generate(capitalize=args.title)
+    word = worg_generator.generate()
+    if args.title:
+        word = word.capitalize()
     print(word)
 
 if __name__ == '__main__':
