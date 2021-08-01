@@ -2,9 +2,11 @@
 # -*- coding: UTF-8 -*-
 from argparse import ArgumentDefaultsHelpFormatter
 from argparse import ArgumentParser
-
 from collections import namedtuple
+import os
 import random
+
+CONFIG_FOLDER = 'wordidgen-a20ad162-f2cb-11eb-81a6-33a7c6316f2d'
 
 Consonant = namedtuple('Consonant', ['hard_letter', 'soft_letter'])
 Vowel = namedtuple('Vowel', ['letter', 'is_soft'])
@@ -67,12 +69,44 @@ def main():
     parser.add_argument('-c', '--count',
                         action='store_true',
                         help='print number of possible words')
+    parser.add_argument('-s', '--save',
+                        action='store_true',
+                        help='remember that the word was generated')
+    parser.add_argument('-u', '--unique',
+                        action='store_true',
+                        help='do not generate remembered words again')
     args = parser.parse_args()
-    worg_generator = WordGenerator(length=args.length)
+    word_generator = WordGenerator(length=args.length)
+    config_name = 'ба' + str(args.length) + '.txt'
+    config_path = os.path.join(os.path.expanduser("~"), '.config',
+                               CONFIG_FOLDER, config_name)
+    print(config_path)
+    os.makedirs(os.path.dirname(config_path), exist_ok=True)
+    generated_words = []
+    if args.save:
+        try:
+            with open(config_path, 'rt+') as f:
+                generated_words = f.read().splitlines()
+        except:
+            pass
     if args.count:
-        print(worg_generator.count)
+        print(word_generator.count)
         return
-    word = worg_generator.generate()
+    if len(generated_words) >= word_generator.count:
+        print('All possible unique words are already generated')
+        return
+    while True:
+        #TODO what if all words are already generated?
+        #TODO when particular number is needed
+        word = word_generator.generate()
+        if word not in generated_words:
+            break
+        print(word, 'duplicate')
+    if args.save:
+        #TODO need to make thread-safe
+        #TODO use correct path on different systems
+        with open(config_path, 'at+') as f:
+            f.write(word + '\n')
     if args.title:
         word = word.capitalize()
     print(word)
