@@ -80,7 +80,6 @@ def main():
     config_name = 'ба' + str(args.length) + '.txt'
     config_path = os.path.join(os.path.expanduser("~"), '.config',
                                CONFIG_FOLDER, config_name)
-    print(config_path)
     os.makedirs(os.path.dirname(config_path), exist_ok=True)
     generated_words = []
     if args.save:
