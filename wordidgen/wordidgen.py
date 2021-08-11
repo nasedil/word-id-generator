@@ -1,5 +1,11 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+"""
+Note that words that correspond to a smaller number generally sorts before
+a word that corresponds to a larger number, unless "ё" and "е" are in the same
+position.  So if you need fully sortable system, you have to exclude one of
+those letters in word generator.
+"""
 from argparse import ArgumentDefaultsHelpFormatter
 from argparse import ArgumentParser
 from collections import namedtuple
@@ -11,14 +17,18 @@ CONFIG_FOLDER = 'wordidgen-a20ad162-f2cb-11eb-81a6-33a7c6316f2d'
 Consonant = namedtuple('Consonant', ['hard_letter', 'soft_letter'])
 Vowel = namedtuple('Vowel', ['letter', 'is_soft'])
 
-CONSONANTS_REGULAR = [Consonant(l, l) for l in 'бвгджзклмнпрсфхчц']
+CONSONANTS_REGULAR = [Consonant(l, l) for l in 'бвгджзклмнпрсфхцч']
 CONSONANT_T = Consonant('т', None)
-CONSONANT_SH = Consonant('ш', 'щ')
-CONSONANTS = CONSONANTS_REGULAR + [CONSONANT_T, CONSONANT_SH]
+CONSONANT_SH_hard = Consonant('ш', None)
+CONSONANT_SH_soft = Consonant(None, 'щ')
+CONSONANTS = (CONSONANTS_REGULAR[0:13] + [CONSONANT_T]
+              + CONSONANTS_REGULAR[13:17]
+              + [CONSONANT_SH_hard, CONSONANT_SH_soft])
 
 VOWELS_HARD = [Vowel(l, False) for l in 'аоуыэ']
-VOWELS_SOFT = [Vowel(l, True) for l in 'яёюие']
-VOWELS = VOWELS_HARD + VOWELS_SOFT
+VOWELS_SOFT = [Vowel(l, True) for l in 'еёиюя']
+VOWELS = (VOWELS_HARD[0:1] + VOWELS_SOFT[0:3]
+          + VOWELS_HARD[1:5] + VOWELS_SOFT[3:5])
 
 class WordGenerator:
     """Generate word by combining syllables"""
@@ -48,7 +58,7 @@ class WordGenerator:
         for i in range(self.length):
             r = number % self.syllable_count
             number = number // self.syllable_count
-            word += self.syllables[r]
+            word = self.syllables[r] + word
         return word
 
 def main():
@@ -96,11 +106,15 @@ def main():
         return
     while True:
         #TODO what if all words are already generated?
-        #TODO when particular number is needed
-        word = word_generator.generate()
-        if word not in generated_words:
+        number = args.number
+        if args.number == -1:
+            number = None
+        word = word_generator.generate(number=number)
+        if word not in generated_words or not args.unique:
             break
-        print(word, 'duplicate')
+        if args.number != -1 and args.unique:
+            print(word, 'is already generated')
+            return
     if args.save:
         #TODO need to make thread-safe
         #TODO use correct path on different systems
