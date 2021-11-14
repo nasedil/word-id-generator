@@ -17,12 +17,10 @@ CONFIG_FOLDER = 'wordidgen-a20ad162-f2cb-11eb-81a6-33a7c6316f2d'
 Consonant = namedtuple('Consonant', ['hard_letter', 'soft_letter'])
 Vowel = namedtuple('Vowel', ['letter', 'is_soft'])
 
-CONSONANTS_REGULAR = [Consonant(l, l) for l in 'бвгджзклмнпрсфхцч']
-CONSONANT_T = Consonant('т', None)
+CONSONANTS_REGULAR = [Consonant(l, l) for l in 'бвгджзклмнпрстфхцч']
 CONSONANT_SH_hard = Consonant('ш', None)
 CONSONANT_SH_soft = Consonant(None, 'щ')
-CONSONANTS = (CONSONANTS_REGULAR[0:13] + [CONSONANT_T]
-              + CONSONANTS_REGULAR[13:17]
+CONSONANTS = (CONSONANTS_REGULAR[0:18]
               + [CONSONANT_SH_hard, CONSONANT_SH_soft])
 
 VOWELS_HARD = [Vowel(l, False) for l in 'аоуыэ']
