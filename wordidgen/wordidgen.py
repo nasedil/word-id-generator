@@ -20,8 +20,10 @@ Vowel = namedtuple('Vowel', ['letter', 'is_soft'])
 CONSONANTS_REGULAR = [Consonant(l, l) for l in 'бвгджзклмнпрстфхцч']
 CONSONANT_SH_hard = Consonant('ш', None)
 CONSONANT_SH_soft = Consonant(None, 'щ')
-CONSONANTS = (CONSONANTS_REGULAR[0:18]
-              + [CONSONANT_SH_hard, CONSONANT_SH_soft])
+CONSONANTS_EXTRA = [Consonant(l, l) for l in 'ґџӡҏ']
+CONSONANTS = (CONSONANTS_REGULAR
+              + [CONSONANT_SH_hard, CONSONANT_SH_soft]
+              + CONSONANTS_EXTRA)
 
 VOWELS_HARD = [Vowel(l, False) for l in 'аоуыэ']
 VOWELS_SOFT = [Vowel(l, True) for l in 'еёиюя']
