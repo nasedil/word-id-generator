@@ -21,21 +21,26 @@ CONSONANTS_REGULAR = [Consonant(l, l) for l in 'бвгджзклмнпрстфх
 CONSONANT_SH_hard = Consonant('ш', None)
 CONSONANT_SH_soft = Consonant(None, 'щ')
 CONSONANTS_EXTRA = [Consonant(l, l) for l in 'ґџӡҏӈҙҫԋԉԃԏ']
-CONSONANTS = (CONSONANTS_REGULAR
-              + [CONSONANT_SH_hard, CONSONANT_SH_soft]
-              + CONSONANTS_EXTRA)
+CONSONANTS_CYRILLIC = (CONSONANTS_REGULAR
+                       + [CONSONANT_SH_hard, CONSONANT_SH_soft])
+CONSONANTS_EXTCYRILLIC = (CONSONANTS_REGULAR
+                          + [CONSONANT_SH_hard, CONSONANT_SH_soft]
+                          + CONSONANTS_EXTRA)
 
 VOWELS_HARD = [Vowel(l, False) for l in 'аоуыэ']
 VOWELS_SOFT = [Vowel(l, True) for l in 'еёиюя']
-VOWELS = (VOWELS_HARD[0:1] + VOWELS_SOFT[0:3]
-          + VOWELS_HARD[1:5] + VOWELS_SOFT[3:5])
+VOWELS_CYRILLIC = (VOWELS_HARD[0:1] + VOWELS_SOFT[0:3]
+                   + VOWELS_HARD[1:5] + VOWELS_SOFT[3:5])
+
+CONSONANTS_LATIN = [Consonant(l, l) for l in 'bcdfghjklmnpqrstvwxz']
+VOWELS_LATIN = [Vowel(l, False) for l in 'aeiou']
 
 class WordGenerator:
     """Generate word by combining syllables"""
 
     def __init__(self,
-                 consonants=CONSONANTS,
-                 vowels=VOWELS,
+                 consonants=CONSONANTS_CYRILLIC,
+                 vowels=VOWELS_CYRILLIC,
                  length=4):
         self.consonants = consonants
         self.vowels = vowels
@@ -85,8 +90,23 @@ def main():
     parser.add_argument('-u', '--unique',
                         action='store_true',
                         help='do not generate remembered words again')
+    parser.add_argument('-v', '--vocabulary',
+                        default='extcyrillic',
+                        help='set of letters to use '
+                             '(cyrillic, extcyrillic, latin)')
     args = parser.parse_args()
-    word_generator = WordGenerator(length=args.length)
+    if args.vocabulary == 'cyrillic':
+        consonants = CONSONANTS_CYRILLIC
+        vowels = VOWELS_CYRILLIC
+    elif args.vocabulary == 'extcyrillic':
+        consonants = CONSONANTS_EXTCYRILLIC
+        vowels = VOWELS_CYRILLIC
+    elif args.vocabulary == 'latin':
+        consonants = CONSONANTS_LATIN
+        vowels = VOWELS_LATIN
+    word_generator = WordGenerator(length=args.length,
+                                   consonants=consonants,
+                                   vowels=vowels)
     config_name = 'ба' + str(args.length) + '.txt'
     config_path = os.path.join(os.path.expanduser("~"), '.config',
                                CONFIG_FOLDER, config_name)
