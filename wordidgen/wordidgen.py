@@ -33,13 +33,13 @@ VOWELS_CYRILLIC = (VOWELS_HARD[0:1] + VOWELS_SOFT[0:3]
                    + VOWELS_HARD[1:5] + VOWELS_SOFT[3:5])
 
 CONSONANTS_LATIN = [Consonant(l, l) for l in 'bcdfghjklmnpqrstvwxz']
-VOWELS_LATIN = [Vowel(l, False) for l in 'aeiou']
+VOWELS_LATIN = [Vowel(l, False) for l in 'aeiouy']
 
 class WordGenerator:
     """Generate word by combining syllables"""
 
     def __init__(self,
-                 consonants=CONSONANTS_CYRILLIC,
+                 consonants=CONSONANTS_EXTCYRILLIC,
                  vowels=VOWELS_CYRILLIC,
                  length=4):
         self.consonants = consonants
