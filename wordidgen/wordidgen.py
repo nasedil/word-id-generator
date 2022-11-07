@@ -24,7 +24,7 @@ CONSONANTS_EXTRA = [Consonant(l, l) for l in 'ґџӡҏӈҙҫԋԉԃԏ']
 CONSONANTS_EXTRA_PAIRS = [
     Consonant('ў', 'ѱ'),
     Consonant('ӿ', 'й'),
-    Consonant('ѣ', 'ұ'),
+    Consonant('ѣ', None),
     Consonant('һ', 'ҩ'),
     Consonant('ѳ', 'ғ'),
 ]
