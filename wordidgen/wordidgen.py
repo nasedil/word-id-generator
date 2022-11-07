@@ -21,11 +21,18 @@ CONSONANTS_REGULAR = [Consonant(l, l) for l in 'бвгджзклмнпрстфх
 CONSONANT_SH_hard = Consonant('ш', None)
 CONSONANT_SH_soft = Consonant(None, 'щ')
 CONSONANTS_EXTRA = [Consonant(l, l) for l in 'ґџӡҏӈҙҫԋԉԃԏ']
+CONSONANTS_EXTRA_PAIRS = [
+    Consonant('ў', 'ѱ'),
+    Consonant('ӿ', 'й'),
+    Consonant('ѣ', 'ұ'),
+    Consonant('һ', 'ҩ'),
+    Consonant('ѳ', 'ғ'),
+]
 CONSONANTS_CYRILLIC = (CONSONANTS_REGULAR
                        + [CONSONANT_SH_hard, CONSONANT_SH_soft])
 CONSONANTS_EXTCYRILLIC = (CONSONANTS_REGULAR
                           + [CONSONANT_SH_hard, CONSONANT_SH_soft]
-                          + CONSONANTS_EXTRA)
+                          + CONSONANTS_EXTRA + CONSONANTS_EXTRA_PAIRS)
 
 VOWELS_HARD = [Vowel(l, False) for l in 'аоуыэ']
 VOWELS_SOFT = [Vowel(l, True) for l in 'еёиюя']
