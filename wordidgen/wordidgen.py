@@ -42,6 +42,12 @@ VOWELS_CYRILLIC = (VOWELS_HARD[0:1] + VOWELS_SOFT[0:3]
 CONSONANTS_LATIN = [Consonant(l, l) for l in 'bcdfghjklmnpqrstvwxz']
 VOWELS_LATIN = [Vowel(l, False) for l in 'aeiouy']
 
+VOCABULARIES = {
+    'cyrillic': (CONSONANTS_CYRILLIC, VOWELS_CYRILLIC),
+    'extcyrillic': (CONSONANTS_EXTCYRILLIC, VOWELS_CYRILLIC),
+    'latin': (CONSONANTS_LATIN, VOWELS_LATIN)
+}
+
 class WordGenerator:
     """Generate word by combining syllables"""
 
@@ -102,15 +108,7 @@ def main():
                         help='set of letters to use '
                              '(cyrillic, extcyrillic, latin)')
     args = parser.parse_args()
-    if args.vocabulary == 'cyrillic':
-        consonants = CONSONANTS_CYRILLIC
-        vowels = VOWELS_CYRILLIC
-    elif args.vocabulary == 'extcyrillic':
-        consonants = CONSONANTS_EXTCYRILLIC
-        vowels = VOWELS_CYRILLIC
-    elif args.vocabulary == 'latin':
-        consonants = CONSONANTS_LATIN
-        vowels = VOWELS_LATIN
+    consonants, vowels = VOCABULARIES[args.vocabulary]
     word_generator = WordGenerator(length=args.length,
                                    consonants=consonants,
                                    vowels=vowels)
