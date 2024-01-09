@@ -42,10 +42,14 @@ VOWELS_CYRILLIC = (VOWELS_HARD[0:1] + VOWELS_SOFT[0:3]
 CONSONANTS_LATIN = [Consonant(l, l) for l in 'bcdfghjklmnpqrstvwxz']
 VOWELS_LATIN = [Vowel(l, False) for l in 'aeiouy']
 
+EASY_CONSONANTS = [Consonant(l, l) for l in 'mnktp']
+EASY_VOWELS = [Vowel(l, False) for l in 'aiu']
+
 VOCABULARIES = {
     'cyrillic': (CONSONANTS_CYRILLIC, VOWELS_CYRILLIC),
     'extcyrillic': (CONSONANTS_EXTCYRILLIC, VOWELS_CYRILLIC),
-    'latin': (CONSONANTS_LATIN, VOWELS_LATIN)
+    'latin': (CONSONANTS_LATIN, VOWELS_LATIN),
+    'easy': (EASY_CONSONANTS, EASY_VOWELS),
 }
 
 class WordGenerator:
