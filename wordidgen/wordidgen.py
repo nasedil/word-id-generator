@@ -33,23 +33,27 @@ CONSONANTS_CYRILLIC = (CONSONANTS_REGULAR
 CONSONANTS_EXTCYRILLIC = (CONSONANTS_REGULAR
                           + [CONSONANT_SH_hard, CONSONANT_SH_soft]
                           + CONSONANTS_EXTRA + CONSONANTS_EXTRA_PAIRS)
+EASY_CONSONANTS_CYRILLIC = [Consonant(l, l) for l in 'бвгзклмнпсфхц']
 
 VOWELS_HARD = [Vowel(l, False) for l in 'аоуыэ']
 VOWELS_SOFT = [Vowel(l, True) for l in 'еёиюя']
 VOWELS_CYRILLIC = (VOWELS_HARD[0:1] + VOWELS_SOFT[0:3]
                    + VOWELS_HARD[1:5] + VOWELS_SOFT[3:5])
+EASY_VOWELS_CYRILLIC = (VOWELS_HARD[0:1] + VOWELS_SOFT[0:3:2]
+                        + VOWELS_HARD[1:3])
 
 CONSONANTS_LATIN = [Consonant(l, l) for l in 'bcdfghjklmnpqrstvwxz']
 VOWELS_LATIN = [Vowel(l, False) for l in 'aeiouy']
 
-EASY_CONSONANTS = [Consonant(l, l) for l in 'mnktp']
-EASY_VOWELS = [Vowel(l, False) for l in 'aiu']
+EASY_CONSONANTS_LATIN = [Consonant(l, l) for l in 'mnktp']
+EASY_VOWELS_LATIN = [Vowel(l, False) for l in 'aiu']
 
 VOCABULARIES = {
     'cyrillic': (CONSONANTS_CYRILLIC, VOWELS_CYRILLIC),
     'extcyrillic': (CONSONANTS_EXTCYRILLIC, VOWELS_CYRILLIC),
     'latin': (CONSONANTS_LATIN, VOWELS_LATIN),
-    'easy': (EASY_CONSONANTS, EASY_VOWELS),
+    'easy_latin': (EASY_CONSONANTS_LATIN, EASY_VOWELS_LATIN),
+    'easy_cyrillic': (EASY_CONSONANTS_CYRILLIC, EASY_VOWELS_CYRILLIC),
 }
 
 class WordGenerator:
@@ -109,8 +113,7 @@ def main():
                         help='do not generate remembered words again')
     parser.add_argument('-v', '--vocabulary',
                         default='extcyrillic',
-                        help='set of letters to use '
-                             '(cyrillic, extcyrillic, latin)')
+                        help='set of letters to use (' + ', '.join(VOCABULARIES.keys()) + ')')
     args = parser.parse_args()
     consonants, vowels = VOCABULARIES[args.vocabulary]
     word_generator = WordGenerator(length=args.length,
