@@ -1,20 +1,35 @@
 # -*- coding: UTF-8 -*-
-
-import locale
-locale.setlocale(locale.LC_ALL, "")
-
-import pytest
-
 from wordidgen import wordidgen
 
 def test_wordidgen():
-    word_generator = wordidgen.WordGenerator(length=1)
+    word_generator = wordidgen.WordGenerator(
+        consonants=wordidgen.CONSONANTS_CYRILLIC,
+        vowels=wordidgen.VOWELS_CYRILLIC,
+        length=1)
     words = []
     for i in range(word_generator.count):
         words.append(word_generator.generate(number=i))
-    assert words == sorted(words, key=locale.strxfrm)
-    assert word_generator.count == 185
-    word_generator = wordidgen.WordGenerator(length=2)
+    assert words == ['ба', 'бе', 'бё', 'би', 'бо', 'бу', 'бы', 'бэ', 'бю', 'бя',
+                     'ва', 'ве', 'вё', 'ви', 'во', 'ву', 'вы', 'вэ', 'вю', 'вя',
+                     'га', 'ге', 'гё', 'ги', 'го', 'гу', 'гы', 'гэ', 'гю', 'гя',
+                     'да', 'де', 'дё', 'ди', 'до', 'ду', 'ды', 'дэ', 'дю', 'дя',
+                     'жа', 'же', 'жё', 'жи', 'жо', 'жу', 'жы', 'жэ', 'жю', 'жя',
+                     'за', 'зе', 'зё', 'зи', 'зо', 'зу', 'зы', 'зэ', 'зю', 'зя',
+                     'ка', 'ке', 'кё', 'ки', 'ко', 'ку', 'кы', 'кэ', 'кю', 'кя',
+                     'ла', 'ле', 'лё', 'ли', 'ло', 'лу', 'лы', 'лэ', 'лю', 'ля',
+                     'ма', 'ме', 'мё', 'ми', 'мо', 'му', 'мы', 'мэ', 'мю', 'мя',
+                     'на', 'не', 'нё', 'ни', 'но', 'ну', 'ны', 'нэ', 'ню', 'ня',
+                     'па', 'пе', 'пё', 'пи', 'по', 'пу', 'пы', 'пэ', 'пю', 'пя',
+                     'ра', 'ре', 'рё', 'ри', 'ро', 'ру', 'ры', 'рэ', 'рю', 'ря',
+                     'са', 'се', 'сё', 'си', 'со', 'су', 'сы', 'сэ', 'сю', 'ся',
+                     'та', 'те', 'тё', 'ти', 'то', 'ту', 'ты', 'тэ', 'тю', 'тя',
+                     'фа', 'фе', 'фё', 'фи', 'фо', 'фу', 'фы', 'фэ', 'фю', 'фя',
+                     'ха', 'хе', 'хё', 'хи', 'хо', 'ху', 'хы', 'хэ', 'хю', 'хя',
+                     'ца', 'це', 'цё', 'ци', 'цо', 'цу', 'цы', 'цэ', 'цю', 'ця',
+                     'ча', 'че', 'чё', 'чи', 'чо', 'чу', 'чы', 'чэ', 'чю', 'чя',
+                     'ша', 'шо', 'шу', 'шы', 'шэ', 'ще', 'щё', 'щи', 'щю', 'щя']
+    assert word_generator.count == 190
+    word_generator.length = 2
     assert word_generator.generate(number=0) == 'баба'
-    assert word_generator.generate(number=185) == 'беба'
-    assert word_generator.generate(number=187) == 'бебё'
+    assert word_generator.generate(number=185) == 'баще'
+    assert word_generator.generate(number=192) == 'бебё'

@@ -77,7 +77,7 @@ class WordGenerator:
         word = ''
         if number is None:
             number = random.randrange(self.count)
-        for i in range(self.length):
+        for _ in range(self.length):
             r = number % self.syllable_count
             number = number // self.syllable_count
             word = self.syllables[r] + word
